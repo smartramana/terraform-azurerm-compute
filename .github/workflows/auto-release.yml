@@ -10,34 +10,18 @@ jobs:
   release:
     name: release
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "lts/*"
-      - name: install semantic-release plugins
-        run: npm install --no-save semantic-release-plugin-github-breaking-version-tag
-      - name: write configuration
-        run: |
-          cat >.releaserc <<EOL
-          {
-            "branches": [
-              "+([0-9]).x",
-              "main",
-              {
-                "name": "beta",
-                "prerelease": true
-              }
-            ],
-            "plugins": [
-              "@semantic-release/commit-analyzer",
-              "@semantic-release/release-notes-generator",
-              "semantic-release-plugin-github-breaking-version-tag",
-              "@semantic-release/github"
-            ]
-          }
-          EOL
-      - name: Release the new version
-        run: npx semantic-release --debug
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test -- --watch=false --browsers=ChromeHeadless
+    - run: npx semantic-release
