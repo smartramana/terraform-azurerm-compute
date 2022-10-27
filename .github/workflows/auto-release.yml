@@ -18,3 +18,34 @@ jobs:
         config-name: auto-release.yml
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+  create-version:
+    runs-on: ubuntu-latest
+    steps:
+      # check out module code
+      - uses: actions/checkout@v3
+      
+      # create tar.gz artifact of the module, excluding any non-essential file
+      # see https://www.terraform.io/cloud-docs/api-docs/private-registry/modules#add-a-module-version-private-module
+      - name: Create artifact
+        id: artifact
+        run: |
+          # create temporary directory to house tar
+          mkdir release
+          # artifact filename
+          _artifact_file="$(pwd)/release/${{ github.ref_name }}.tar.gz"
+          
+          # create artifact
+          # add / remove --excludes / --includes as needed
+          tar \
+            -zcvf "${_artifact_file}" \
+            --exclude .git \
+            --exclude .github \
+            --exclude .gitignore \
+            --exclude release \
+            --exclude tests \
+            --exclude .terraform \
+            .
+          
+          # set output value for this step
+          echo "::set-output name=artifact_filepath::${_artifact_file}"
