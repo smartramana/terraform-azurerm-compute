@@ -39,3 +39,11 @@ jobs:
           echo "::set-output name=artifact_filepath::${_artifact_file}"
           echo $GITHUB_OUTPUT
           echo ${{ steps.artifact.outputs.artifact_filepath }}
+          
+      - name: Step 3 - Use the Upload Artifact GitHub Action
+        uses: actions/upload-artifact@v2
+        with: 
+          name: assets-for-download
+          path: release
+          
+          
