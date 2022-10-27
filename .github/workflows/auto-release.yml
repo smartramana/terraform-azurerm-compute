@@ -51,3 +51,4 @@ jobs:
           echo "name=artifact_filepath=${_artifact_file}" >> $GITHUB_OUTPUT
           echo "::set-output name=artifact_filepath::${_artifact_file}"
           echo $GITHUB_OUTPUT
+          echo ${{ steps.artifact.outputs.artifact_filepath }}
