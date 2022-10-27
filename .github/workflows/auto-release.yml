@@ -36,6 +36,8 @@ jobs:
             .
           
           # set output value for this step
+          - name: Set output
+            run: "name=artifact_filepath=${_artifact_file}" >> $GITHUB_OUTPUT
           echo "name=artifact_filepath=${_artifact_file}" >> $GITHUB_OUTPUT
           echo "::set-output name=artifact_filepath::${_artifact_file}"
           echo $GITHUB_OUTPUT
