@@ -1,9 +1,6 @@
 name: is-semantic-pr
-"on":
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+on:
+  - pull_request
 
 jobs:
   release-bot:
