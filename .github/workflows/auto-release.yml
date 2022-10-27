@@ -44,6 +44,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with: 
           name: assets-for-download
-          path: release
+          path: ${_artifact_file}
           
           
