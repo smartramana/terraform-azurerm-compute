@@ -11,7 +11,12 @@ jobs:
     name: release
     runs-on: ubuntu-latest
     steps:
-      - name: 🤖 is-semantic-release
-        uses: sebbo2002/action-is-semantic-pr@main
+      - id: semver-checkout
+        name: 🤖 is-semantic-release
+        uses: EasyDesk/action-semver-checkout@v1
+      - name: Release
+        if: ${{ steps.semver-checkout.outputs.should-release == 'true' }}
+        uses: ./
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          version: ${{ steps.semver-checkout.outputs.version }}
+          prerelease: ${{ steps.semver-checkout.outputs.is-github-prerelease }}
