@@ -11,11 +11,9 @@ jobs:
     name: release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Release
-        uses: moletti/semantic-release-action@v1
-        env:
+      - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: Release
+        uses: ridedott/release-me-action@master
+        with:
+          disable-changelog: true
